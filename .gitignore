@@ -1,0 +1,45 @@
+# Python Virtual Environments
+venv/
+.venv/
+env/
+
+# Bytecode file
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Tests / Coverage
+.pytest_cache/
+htmlcov/
+
+# Mypy cache
+.mypy_cache/
+
+# Environment Variables & Local Configuration
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Key file
+# *.key
+# *.pem
+
+# IDE
+.idea/
+.vscode/
+
+# Os
+.DS_Store
