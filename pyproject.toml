@@ -16,6 +16,15 @@ dependencies = [
     "pydantic[email]>=2.4.0", # 타입힌트 활용해서 유효성 검사(@Valid), 직렬화 수행
     "redis>=5.0.0",
     "celery>=5.6.2",
-    "pytest>=9.0.2",
     "httpx"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
 ]
