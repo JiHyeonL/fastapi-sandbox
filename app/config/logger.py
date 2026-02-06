@@ -3,7 +3,7 @@ import sys
 
 import colorlog
 
-from app.core.config import LOG_LEVEL
+from app.config.config import LOG_LEVEL
 
 
 def setup_logger(sql_debug=False):

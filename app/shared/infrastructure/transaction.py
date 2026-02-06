@@ -6,12 +6,11 @@ import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
+from app.core.database import AsyncDBSession
+from common.exceptions import APIException
+from common.responses import APIResponseCode
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.core.database import AsyncDBSession
-from app.core.exceptions import APIException
-from app.core.responses import APIResponseCode
 
 logger = logging.getLogger(__name__)
 
@@ -48,11 +47,11 @@ async def transaction_context() -> AsyncGenerator[AsyncSession, None]:
     사용 예시:
     ```python
     async with transaction_context() as db:
-        user = User(name="test")
-        db.add(user)
+        users = User(name="test")
+        db.add(users)
         await db.flush()  # 중간 검증 가능
 
-        project = Project(user_id=user.id)
+        project = Project(user_id=users.id)
         db.add(project)
         # 에러 발생시 user와 project 모두 롤백
     ```

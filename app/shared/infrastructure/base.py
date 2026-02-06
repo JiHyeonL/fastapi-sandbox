@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
-from app.core.config import DATABASE_URL
-from app.core.timestamp import BaseTimeEntity
+from app.config.config import DATABASE_URL
+from common.timestamp import BaseTimeEntity
 
 engine = create_async_engine(DATABASE_URL, echo=False)
 

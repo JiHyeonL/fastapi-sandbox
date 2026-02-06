@@ -11,7 +11,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from app.core.logger import logger
+from common.logger import logger
 
 
 def setup_all_middleware(app: FastAPI):
@@ -90,7 +90,6 @@ def setup_logging_middleware(app: FastAPI):
             return response
 
         except Exception as e:
-            # 오류 발생 시 로깅
             process_time = time.time() - start_time
             logger.error(
                 f"요청 실패: {request.method} {request.url} -> ERROR: {str(e)} ({process_time:.3f}s)"

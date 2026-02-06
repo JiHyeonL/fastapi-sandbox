@@ -1,5 +1,5 @@
 """
-Database startup - 데이터베이스 초기화 및 마이그레이션
+데이터베이스 초기화 및 마이그레이션
 """
 
 import asyncio
@@ -10,9 +10,9 @@ from alembic import command
 from alembic.config import Config
 from sqlalchemy import text
 
-from app.core.config import DATABASE_URL
+from app.config.config import DATABASE_URL
 from app.core.database import Base, engine
-from app.core.logger import logger
+from common.logger import logger
 
 
 async def init_database():

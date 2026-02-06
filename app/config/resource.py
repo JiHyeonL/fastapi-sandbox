@@ -1,11 +1,11 @@
 """
-Service Setup - 애플리케이션 시작 시 필요한 리소스 초기화 & 정리
+애플리케이션 시작 시 필요한 리소스 초기화 & 정리
 """
 
 import redis
 
-from app.core.config import REDIS_URL, TOKEN_STORAGE
-from app.core.logger import logger
+from app.config.config import REDIS_URL, TOKEN_STORAGE
+from common.logger import logger
 
 
 async def init_resources():

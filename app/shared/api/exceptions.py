@@ -2,7 +2,7 @@
 API 커스텀 Exception
 """
 
-from app.core.responses import APIResponseCode
+from common.responses import APIResponseCode
 
 
 class APIException(Exception):

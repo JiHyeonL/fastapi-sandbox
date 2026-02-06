@@ -6,13 +6,13 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.core.logger import logger
-from app.core.startup.database import (
+from app.config.database import (
     check_database_health,
     cleanup_database,
     init_database,
 )
-from app.core.startup.resource import cleanup_resources, init_resources
+from app.config.resource import cleanup_resources, init_resources
+from common.logger import logger
 
 
 @asynccontextmanager
