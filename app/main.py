@@ -71,9 +71,9 @@ if __name__ == "__main__":
     logger.info(f"FastAPI Sandbox 서버 시작: http://{HOST}:{PORT}")
 
     uvicorn.run(
-        app,
+        "app.main:app",
         host=HOST,
         port=PORT,
         reload=RELOAD,
-        log_level=LOG_LEVEL
+        log_level=LOG_LEVEL.lower()
     )

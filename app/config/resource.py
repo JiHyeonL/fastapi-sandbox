@@ -4,8 +4,8 @@
 
 import redis
 
-from app.config.config import REDIS_URL, TOKEN_STORAGE
-from common.logger import logger
+from app.config.logger import logger
+from app.config.settings import TOKEN_STORAGE, REDIS_URL
 
 
 async def init_resources():

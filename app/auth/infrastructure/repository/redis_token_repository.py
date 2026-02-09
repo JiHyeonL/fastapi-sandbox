@@ -7,7 +7,7 @@ from typing import Optional
 
 import redis.asyncio as redis
 
-from app.auth.core.ports.token_repository_port import TokenRepositoryPort
+from app.auth.core.interface.token_repository_port import TokenRepositoryPort
 from app.config.logger import logger
 from app.config.settings import REDIS_URL, JWT_EXPIRE_HOURS
 

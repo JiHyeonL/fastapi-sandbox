@@ -3,7 +3,7 @@ import sys
 
 import colorlog
 
-from app.config.config import LOG_LEVEL
+from app.config.settings import LOG_LEVEL
 
 
 def setup_logger(sql_debug=False):
@@ -36,7 +36,7 @@ def setup_logger(sql_debug=False):
     root_logger = logging.getLogger()
     root_logger.handlers.clear()  # 기존 핸들러 제거
     root_logger.addHandler(handler)
-    root_logger.setLevel(getattr(logging, LOG_LEVEL))
+    root_logger.setLevel(getattr(logging, LOG_LEVEL.upper()))
 
     # SQLAlchemy 로거 설정
     sqlalchemy_logger = logging.getLogger("sqlalchemy.engine")

@@ -10,9 +10,9 @@ from alembic import command
 from alembic.config import Config
 from sqlalchemy import text
 
-from app.config.config import DATABASE_URL
-from app.core.database import Base, engine
-from common.logger import logger
+from app.config.logger import logger
+from app.config.settings import DATABASE_URL
+from app.shared.infrastructure.base import Base, engine
 
 
 async def init_database():

@@ -30,4 +30,4 @@ TOKEN_STORAGE = os.getenv("TOKEN_STORAGE", "memory").lower()  # memory, redis
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 
 # 로깅 설정
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
