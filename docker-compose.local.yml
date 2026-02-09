@@ -1,22 +1,16 @@
-# FastAPI Boilerplate Docker Compose (Local Development)
-
-version: '3.8'
-
 services:
-  # FastAPI 애플리케이션 (개발용)
   api:
     build: .
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/fastapi_boilerplate_dev
+      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/fastapi_sandbox
       - JWT_SECRET_KEY=dev-secret-key-do-not-use-in-production
-      - TOKEN_STORAGE=redis  # Celery와 상태 공유를 위해 Redis 사용
+      - TOKEN_STORAGE=redis
       - REDIS_URL=redis://redis:6379
       - DB_TYPE=postgres
       - LOG_LEVEL=DEBUG
-      # Event 시스템 설정 (개발용)
-      - ENABLE_EVENTS=true
+      - ENABLE_EVENTS=false
       - EVENT_BROKER=redis
       - EVENT_PUBLISHER=celery
       - CELERY_BROKER_URL=redis://redis:6379/1
@@ -32,25 +26,23 @@ services:
     volumes:
       - .:/app  # 코드 변경 시 자동 리로드
       - /app/__pycache__  # 캐시 폴더 제외
-    command: [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    command: [ "uv", "run", "-m", "app.main" ]
     restart: unless-stopped
     networks:
       - dev-network
 
-  # PostgreSQL 데이터베이스
   postgres:
     image: postgres:15-alpine
     ports:
       - "5433:5432"  # 로컬 postgres와 포트 충돌 방지
     environment:
-      - POSTGRES_DB=fastapi_boilerplate_dev
+      - POSTGRES_DB=fastapi_sandbox_dev
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
-      - ./scripts/init-dev-db.sql:/docker-entrypoint-initdb.d/init.sql  # 개발용 초기 데이터
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d fastapi_boilerplate_dev" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d fastapi_sandbox_dev" ]
       interval: 10s
       timeout: 5s
       retries: 5
