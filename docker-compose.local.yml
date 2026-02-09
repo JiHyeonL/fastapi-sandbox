@@ -1,0 +1,84 @@
+# FastAPI Boilerplate Docker Compose (Local Development)
+
+version: '3.8'
+
+services:
+  # FastAPI 애플리케이션 (개발용)
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/fastapi_boilerplate_dev
+      - JWT_SECRET_KEY=dev-secret-key-do-not-use-in-production
+      - TOKEN_STORAGE=redis  # Celery와 상태 공유를 위해 Redis 사용
+      - REDIS_URL=redis://redis:6379
+      - DB_TYPE=postgres
+      - LOG_LEVEL=DEBUG
+      # Event 시스템 설정 (개발용)
+      - ENABLE_EVENTS=true
+      - EVENT_BROKER=redis
+      - EVENT_PUBLISHER=celery
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - DEFAULT_EVENT_QUEUE=dev-default
+      - EVENT_MAX_RETRIES=2
+      - EVENT_RETRY_DELAY=30
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app  # 코드 변경 시 자동 리로드
+      - /app/__pycache__  # 캐시 폴더 제외
+    command: [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    restart: unless-stopped
+    networks:
+      - dev-network
+
+  # PostgreSQL 데이터베이스
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5433:5432"  # 로컬 postgres와 포트 충돌 방지
+    environment:
+      - POSTGRES_DB=fastapi_boilerplate_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./scripts/init-dev-db.sql:/docker-entrypoint-initdb.d/init.sql  # 개발용 초기 데이터
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d fastapi_boilerplate_dev" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - dev-network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"  # 로컬 redis와 포트 충돌 방지
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_dev_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - dev-network
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+
+networks:
+  dev-network:
+    driver: bridge

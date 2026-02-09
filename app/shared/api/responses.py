@@ -12,7 +12,8 @@ T = TypeVar("T")
 
 class APIResponseCode(Enum):
     # SUCCESS
-    SUCCESS = ("SUCCESS", 200, "요청이 성공적으로 처리되었습니다")
+    CREATED = ("CREATED", 201, "요청한 리소스가 성공적으로 생성되었습니다")
+    OK = ("OK", 200, "요청이 성공적으로 처리되었습니다")
 
     # AUTH 도메인
     AUTH_UNAUTHORIZED = ("AUTH-01", 401, "인증이 필요합니다")
@@ -62,8 +63,8 @@ class APIResponse(BaseModel, Generic[T]):
     }
 
 
-def success_response(data: Optional[T] = None) -> APIResponse[T]:
-    return APIResponse(code=APIResponseCode.SUCCESS.code, data=data)
+def success_response(code: APIResponseCode, data: Optional[T] = None) -> APIResponse[T]:
+    return APIResponse(code=code.code, data=data)
 
 
 def error_response(code: APIResponseCode) -> APIResponse[None]:

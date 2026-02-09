@@ -11,8 +11,8 @@ from app.config.database import (
     cleanup_database,
     init_database,
 )
+from app.config.logger import logger
 from app.config.resource import cleanup_resources, init_resources
-from common.logger import logger
 
 
 @asynccontextmanager

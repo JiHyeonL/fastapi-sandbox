@@ -11,7 +11,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from common.logger import logger
+from app.config.logger import logger
 
 
 def setup_all_middleware(app: FastAPI):

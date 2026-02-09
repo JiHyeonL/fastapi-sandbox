@@ -16,7 +16,8 @@ dependencies = [
     "pydantic[email]>=2.4.0", # 타입힌트 활용해서 유효성 검사(@Valid), 직렬화 수행
     "redis>=5.0.0",
     "celery>=5.6.2",
-    "httpx"
+    "httpx",
+    "datetime",
 ]
 
 [project.optional-dependencies]

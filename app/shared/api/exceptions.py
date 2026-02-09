@@ -1,8 +1,7 @@
 """
 API 커스텀 Exception
 """
-
-from common.responses import APIResponseCode
+from app.shared.api.responses import APIResponseCode
 
 
 class APIException(Exception):

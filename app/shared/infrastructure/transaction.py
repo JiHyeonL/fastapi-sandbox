@@ -6,11 +6,12 @@ import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from app.core.database import AsyncDBSession
-from common.exceptions import APIException
-from common.responses import APIResponseCode
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.shared.api.exceptions import APIException
+from app.shared.api.responses import APIResponseCode
+from app.shared.infrastructure.base import AsyncDBSession
 
 logger = logging.getLogger(__name__)
 

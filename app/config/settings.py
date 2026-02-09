@@ -10,6 +10,7 @@ load_dotenv()
 # 서버 설정
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8000"))
+RELOAD = bool(os.getenv("RELOAD", False))
 
 # Database 설정
 DATABASE_URL = os.getenv("DATABASE_URL")
