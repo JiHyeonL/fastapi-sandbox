@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, Optional, List
 
 import jwt
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
+from pwdlib.hashers.bcrypt import BcryptHasher
 
 from app.config.logger import logger
 from app.config.settings import ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS, JWT_SECRET_KEY, JWT_ALGORITHM, \
@@ -12,7 +13,7 @@ from app.shared.api.exceptions import APIException
 from app.shared.api.responses import APIResponseCode
 
 # 비밀번호 해싱을 위한 컨텍스트
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = PasswordHash((BcryptHasher(),))
 
 
 class JWTManager:
