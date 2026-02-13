@@ -1,6 +1,7 @@
 from typing import Optional
 
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config.logger import logger
@@ -37,8 +38,10 @@ class PostgresUserRepository(UserRepositoryPort):
                 .where(UserDB.email == email)
             )
             user = result.scalar_one_or_none()
+            if user is None:
+                return None
             return UserDBMapper.db_to_domain(user)
 
-        except Exception as e:
+        except SQLAlchemyError as e:
             logger.error(f"사용자 이메일 조회 실패: {e}")
-            return None
+            raise
