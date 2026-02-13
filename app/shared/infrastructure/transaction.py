@@ -76,7 +76,4 @@ async def transaction_context() -> AsyncGenerator[AsyncSession, None]:
         except Exception as e:
             await session.rollback()
             logger.error(f"예외 발생으로 인한 롤백: {str(e)}")
-            raise APIException(
-                APIResponseCode.TRANSACTION_ERROR,
-                {"original_error": str(e), "error_type": "general_error"},
-            )
+            raise
