@@ -4,14 +4,9 @@
 
 import asyncio
 
-import alembic.runtime.migration
-import alembic.util.exc
-from alembic import command
-from alembic.config import Config
 from sqlalchemy import text
 
 from app.config.logger import logger
-from app.config.settings import DATABASE_URL
 from app.shared.infrastructure.base import Base, engine
 
 
@@ -29,8 +24,8 @@ async def init_database():
             await conn.run_sync(lambda sync_conn: sync_conn.execute(text("SELECT 1")))
             logger.info("데이터베이스 연결 확인 완료")
 
-        # 2. Alembic 마이그레이션 실행
-        await run_migrations()
+        # 2. 데이터베이스 초기화
+        await initialize_db()
         logger.info("데이터베이스 초기화 완료")
 
     except Exception as e:
@@ -38,50 +33,7 @@ async def init_database():
         raise
 
 
-async def run_migrations():
-    try:
-        logger.info("-----데이터베이스 마이그레이션 시작-----")
-
-        alembic_config = Config("alembic.ini")
-        alembic_config.set_main_option("sqlalchemy.url", DATABASE_URL)
-
-        def check_current_revision(connection):
-            context = alembic.runtime.migration.MigrationContext.configure(connection)
-            return context.get_current_revision()
-
-        def upgrade_to_head(connection):
-            alembic_config.attributes["connection"] = connection
-            command.upgrade(alembic_config, "head")
-
-        async with engine.begin() as conn:
-            current_rev = await conn.run_sync(check_current_revision)
-            logger.info(f"현재 데이터베이스 리비전: {current_rev}")
-
-            # 마이그레이션 실행
-            await conn.run_sync(upgrade_to_head)
-
-        logger.info("데이터베이스 마이그레이션 완료")
-
-    except alembic.util.exc.CommandError as e:
-        if "Can't locate revision identified by" in str(e):
-            logger.warning(
-                "마이그레이션 히스토리가 없습니다. 테이블을 새로 생성합니다."
-            )
-            await create_tables()
-        else:
-            logger.error(f"Alembic 마이그레이션 실패: {e}")
-            raise
-    except Exception as e:
-        logger.error(f"마이그레이션 실행 실패: {e}")
-
-        # 마이그레이션 실패 시 테이블 직접 생성 시도
-        await create_tables()
-
-
-async def create_tables():
-    """
-    SQLAlchemy를 사용한 테이블 직접 생성 (Alembic 없이)
-    """
+async def initialize_db():
     try:
         logger.info("-----SQLAlchemy를 통한 테이블 생성 시작-----")
 
