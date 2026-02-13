@@ -36,7 +36,7 @@ async def init_resources():
 async def test_redis_connection():
     try:
         if TOKEN_STORAGE == "redis":
-            redis_client = redis.from_url(REDIS_URL, decode_response=True)
+            redis_client = redis.from_url(REDIS_URL, decode_responses=True)
             await redis_client.ping()
             await redis_client.close()
 
