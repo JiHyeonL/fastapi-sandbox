@@ -16,8 +16,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # 의존성 파일 복사
 COPY pyproject.toml uv.lock ./
 
-# 의존성 설치
-RUN uv sync
+# 의존성 설치 (가상환경 없이 시스템 전역에 설치)
+RUN uv pip install --system .
 
 # 애플리케이션 코드 복사
 COPY . .
@@ -26,7 +26,6 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONPATH=/app
-ENV PATH="/app/.venv/bin:$PATH"
 
 # 포트 노출
 EXPOSE 8000

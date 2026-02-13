@@ -4,7 +4,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/fastapi_sandbox
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/fastapi_sandbox_dev
       - JWT_SECRET_KEY=dev-secret-key-do-not-use-in-production
       - TOKEN_STORAGE=redis
       - REDIS_URL=redis://redis:6379
@@ -26,7 +27,7 @@ services:
     volumes:
       - .:/app  # 코드 변경 시 자동 리로드
       - /app/__pycache__  # 캐시 폴더 제외
-    command: [ "uv", "run", "-m", "app.main" ]
+    command: [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     restart: unless-stopped
     networks:
       - dev-network
@@ -50,7 +51,6 @@ services:
     networks:
       - dev-network
 
-  # Redis
   redis:
     image: redis:7-alpine
     ports:
