@@ -1,8 +1,7 @@
 """
 애플리케이션 시작 시 필요한 리소스 초기화 & 정리
 """
-
-import redis
+import redis.asyncio as redis
 
 from app.config.logger import logger
 from app.config.settings import TOKEN_STORAGE, REDIS_URL
