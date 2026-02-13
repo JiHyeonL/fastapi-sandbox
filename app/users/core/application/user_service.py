@@ -17,7 +17,7 @@ class UserService:
         self.user_repository = user_repository
 
     async def create(self, db: AsyncSession, user_data: UserCreateInput) -> UserCreateOutput:
-        same_user = self.user_repository.find_by_email(user_data.email)
+        same_user = await self.user_repository.find_by_email(user_data.email)
         if same_user:
             logger.warning(f"이미 존재하는 이메일로 회원가입 시도: {user_data.email}")
             raise APIException(APIResponseCode.USER_EMAIL_ALREADY_EXISTS)
@@ -26,8 +26,7 @@ class UserService:
         user_payload = {
             "email": user_data.email,
             "password_hash": password_hash,
-            "name": user_data.name or user_data.email.split("@")[0],
-            "is_active": user_data.is_active,
+            "name": user_data.name or user_data.email.split("@")[0]
         }
 
         saved_user = await self.user_repository.create(db, User(**user_payload))
