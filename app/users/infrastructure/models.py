@@ -17,7 +17,6 @@ class UserDB(Base):
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True, comment="마지막 로그인 시간")
     profile: Mapped["UserDBProfile"] = relationship(
         "UserDBProfile",
-        back_populates="user",
         uselist=False,
         cascade="all, delete-orphan",
         lazy="select"
