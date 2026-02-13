@@ -8,7 +8,7 @@ from app.auth.infrastructure.repository.redis_token_repository import RedisToken
 from app.config.settings import TOKEN_STORAGE
 from app.shared.infrastructure.transaction import logger
 from app.users.core.application.user_service import UserService
-from app.users.dependencies import get_user_repository
+from app.users.dependencies import get_user_service
 
 
 def get_token_repository() -> TokenRepositoryPort:
@@ -21,8 +21,14 @@ def get_token_repository() -> TokenRepositoryPort:
     return MemoryTokenRepository()
 
 
+def get_token_service(
+        token_repository: TokenRepositoryPort = Depends(get_token_repository),
+) -> TokenService:
+    return TokenService(token_repository)
+
+
 def get_auth_service(
-        token_service: TokenService = Depends(get_token_repository),
-        user_service: UserService = Depends(get_user_repository)
+        token_service: TokenService = Depends(get_token_service),
+        user_service: UserService = Depends(get_user_service),
 ) -> AuthService:
     return AuthService(token_service, user_service)
